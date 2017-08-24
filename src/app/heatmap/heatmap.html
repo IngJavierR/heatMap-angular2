@@ -1,0 +1,17 @@
+<h3 [style.color]='color'>3part plugin enabled and Angular material</h3>
+
+<md-select placeholder="Tipo mapa">
+  <md-option value="1">Calor</md-option>
+  <md-option value="2">Relieve</md-option>
+  <md-option value="3">Satélite</md-option>
+</md-select>
+
+<br/>
+<br/>
+<a [routerLink]="['tempo']">Ir a tempo</a>
+
+<ngui-map [center]="centerpoint">
+    <heatmap-layer [data]="points"></heatmap-layer>
+</ngui-map>
+
+<button md-raised-button (click)="addPoint()">AddPoint</button>
