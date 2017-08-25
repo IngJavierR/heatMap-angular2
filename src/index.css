@@ -83,3 +83,9 @@ a:hover {
 md-sidenav {
   width: 200px;
 }
+.hand-cursor{
+  cursor: pointer;
+}
+.fill-remaining-space{
+  flex: 1 1 auto;
+}

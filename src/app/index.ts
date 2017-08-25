@@ -4,16 +4,20 @@ import {routing, RootComponent} from './routes';
 import {NguiMapModule} from '@ngui/map';
 import {HttpModule} from '@angular/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { CdkTableModule } from '@angular/cdk';
 import {MdSelectModule,
         MdButtonModule,
         MdToolbarModule,
         MdSidenavModule,
-        MdListModule} from '@angular/material';
+        MdListModule,
+        MdIconModule,
+        MdTableModule,
+        MdGridListModule,
+        MdProgressBarModule} from '@angular/material';
 
 
 import {MainComponent} from './main/main';
 import {HeatMapComponent} from './heatmap/heatmap';
-import {TempoComponent} from './tempo/tempo';
 
 @NgModule({
   imports: [
@@ -26,6 +30,11 @@ import {TempoComponent} from './tempo/tempo';
     MdToolbarModule,
     MdSidenavModule,
     MdListModule,
+    MdIconModule,
+    MdTableModule,
+    CdkTableModule,
+    MdGridListModule,
+    MdProgressBarModule,
     NguiMapModule.forRoot({apiUrl: 'https://maps.google.com/maps/api/js?v=3.exp&libraries=visualization'})
   ],
   exports: [
@@ -33,13 +42,17 @@ import {TempoComponent} from './tempo/tempo';
     MdSidenavModule,
     MdSelectModule,
     MdButtonModule,
-    MdListModule
+    MdListModule,
+    MdIconModule,
+    MdTableModule,
+    CdkTableModule,
+    MdGridListModule,
+    MdProgressBarModule
   ],
   declarations: [
     RootComponent,
     MainComponent,
     HeatMapComponent,
-    TempoComponent
   ],
   bootstrap: [RootComponent]
 })

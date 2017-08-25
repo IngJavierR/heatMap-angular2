@@ -7,7 +7,7 @@ import 'rxjs/add/operator/catch';
 @Injectable()
 export class HeatMapService {
 
-    private _url: string = 'http://localhost:3002/getPoints';
+    private _url: string = 'http://localhost:8080/comandancia-analytics-web/analytics/indicadores/getCoord?initialDate=2017-08-11T17:40:00&endDate=2017-07-28T15:39:00';
     constructor(private _http: Http) {}
 
     getPoints() {

@@ -1,17 +1,24 @@
 <md-sidenav-container>
-    <md-toolbar>Angular 2 Base Material</md-toolbar>
+    <md-toolbar color="warn">
+        <md-icon class="hand-cursor" (click)="sidenav.open()">reorder</md-icon>
+        <span>Hermosillo mapa de calor</span>
+    </md-toolbar>
     <md-sidenav #sidenav>
+        <md-toolbar color="warn">
+            <span>Menú</span>
+            <span class="fill-remaining-space"></span>
+            <md-icon class="hand-cursor" (click)="sidenav.close()">clear</md-icon>
+        </md-toolbar>
+        Período de tiempo
         <md-list>
-            <md-list-item>Período </md-list-item>
-            <md-list-item> Salt </md-list-item>
-            <md-list-item> Paprika </md-list-item>
+            <md-list-item>
+                <input type="date"/>
+            </md-list-item>
+            <md-list-item>
+                <input type="time"/>
+            </md-list-item>
         </md-list>
-        <button type="button" md-button (click)='changeColor()'>
-            Change Title Color
-        </button>
+        <button md-raised-button (click)="sidenav.close()">Consultar</button>
     </md-sidenav>
-    <button type="button" md-button (click)="sidenav.open()">
-        Open sidenav
-    </button>
     <router-outlet></router-outlet>
 </md-sidenav-container>

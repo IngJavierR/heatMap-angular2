@@ -1,7 +1,7 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { HeatmapLayer } from '@ngui/map';
 import { Observable } from 'rxjs/Rx';
-
+import { DataSource } from '@angular/cdk';
 import { HeatMapService } from '../services/heatmap.service';
 import { DataService } from '../services/data.service';
 
@@ -16,24 +16,17 @@ export class HeatMapComponent implements OnInit {
   heatmap: google.maps.visualization.HeatmapLayer;
   map: google.maps.Map;
   points: any[] = [];
-  centerpoint = '37.782551, -122.445368';
+  centerpoint = '29.073269, -110.959484';
   pointsResponse: Observable<any[]>;
-  color: string = 'blue';
-  private _cord = [
-      -122.442688,
-      -122.441688,
-      -122.440688,
-      -122.449588
-    ];
+  isLoading: boolean = true;
 
-  constructor(private _heatMapService: HeatMapService,
-              private _data: DataService) {
-    this._data
-      .getMessage()
-      .subscribe(
-      val => this.color = val
-    );
-  }
+  dataSourceCounts;
+  dataSourceColonies;
+
+  displayedColumnsCounts = ['name', 'numberOfEvents', ];
+  displayedColumnsColonies = ['name', 'colony', 'numberOfEvents'];
+
+  constructor(private _heatMapService: HeatMapService) {}
 
   ngOnInit() {
     this.points = [];
@@ -44,7 +37,7 @@ export class HeatMapComponent implements OnInit {
     });
   }
 
-  addPoint = function(){
+  refresh = function(){
     this.getPoints();
   };
 
@@ -53,13 +46,35 @@ export class HeatMapComponent implements OnInit {
     this._heatMapService.getPoints()
     .subscribe(
       (response) => {
-        this.points = response.map(function(coord: any){
-          return (new google.maps.LatLng(coord.lat, coord.long));
+        this.points = response.eventData.map(function(coord: any){
+          return (new google.maps.LatLng(coord.latitude, coord.lontitude));
         });
+        this.dataSourceCounts = new CountsDataSource(response.eventCounts);
+        this.dataSourceColonies = new CountsDataSource(response.eventCountsColonies);
+        this.isLoading = false;
       },
       (err) => {
+        this.isLoading = false;
         console.log(err);
       }
     );
   };
+}
+
+export class CountsDataSource extends DataSource<any[]> {
+
+  data: any[] = [];
+
+  constructor(data: any[]) {
+    super();
+    this.data = data;
+  }
+
+  /** Connect function called by the table to retrieve one stream containing the data to render. */
+  connect(): Observable<any[]> {
+    return Observable.of(this.data);
+  }
+
+  disconnect(): void {}
+
 }

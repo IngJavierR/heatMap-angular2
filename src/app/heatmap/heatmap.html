@@ -1,17 +1,61 @@
-<h3 [style.color]='color'>3part plugin enabled and Angular material</h3>
-
-<md-select placeholder="Tipo mapa">
-  <md-option value="1">Calor</md-option>
-  <md-option value="2">Relieve</md-option>
-  <md-option value="3">Satélite</md-option>
-</md-select>
-
-<br/>
-<br/>
-<a [routerLink]="['tempo']">Ir a tempo</a>
-
-<ngui-map [center]="centerpoint">
+<md-progress-bar color="warn" mode="indeterminate" *ngIf="isLoading"></md-progress-bar>
+<ngui-map zoom="11" [center]="centerpoint" class="map-margin">
     <heatmap-layer [data]="points"></heatmap-layer>
 </ngui-map>
+<md-grid-list cols="2" rowHeight="5:4" class="map-margin">
+    <md-grid-tile>
+        <md-grid-tile-header color="warn">
+            <h3>Eventos por tipo</h3>
+        </md-grid-tile-header>
+        <div class="table-container mat-elevation-z8">
+            <md-table #table [dataSource]="dataSourceColonies">
 
-<button md-raised-button (click)="addPoint()">AddPoint</button>
+                <!-- Tipo Column -->
+                <ng-container cdkColumnDef="name">
+                    <md-header-cell *cdkHeaderCellDef> Tipo </md-header-cell>
+                    <md-cell *cdkCellDef="let row"> {{row.name}} </md-cell>
+                </ng-container>
+
+                <!-- Numero Column -->
+                <ng-container cdkColumnDef="numberOfEvents">
+                    <md-header-cell *cdkHeaderCellDef [ngClass]="'id-table-width'"> Eventos </md-header-cell>
+                    <md-cell *cdkCellDef="let row" [ngClass]="'id-table-width'"> {{row.numberOfEvents}} </md-cell>
+                </ng-container>
+
+                <md-header-row *cdkHeaderRowDef="displayedColumnsCounts"></md-header-row>
+                <md-row *cdkRowDef="let row; columns: displayedColumnsCounts;"></md-row>
+            </md-table>
+        </div>
+    </md-grid-tile>
+    <md-grid-tile>
+        <md-grid-tile-header>
+            <h3>Eventos por tipo-colonia</h3>
+        </md-grid-tile-header>
+        <div class="table-container mat-elevation-z8">
+            <md-table #table [dataSource]="dataSourceColonies">
+
+                <!-- Tipo Column -->
+                <ng-container cdkColumnDef="name">
+                        <md-header-cell *cdkHeaderCellDef> Tipo </md-header-cell>
+                        <md-cell *cdkCellDef="let row"> {{row.name}} </md-cell>
+                    </ng-container>
+
+                <!-- Colony Column -->
+                <ng-container cdkColumnDef="colony">
+                    <md-header-cell *cdkHeaderCellDef [ngClass]="'colonia-table-width'"> Colonia </md-header-cell>
+                    <md-cell *cdkCellDef="let row" [ngClass]="'colonia-table-width'"> {{row.colony}} </md-cell>
+                </ng-container>
+
+                <!-- Numero Column -->
+                <ng-container cdkColumnDef="numberOfEvents">
+                    <md-header-cell *cdkHeaderCellDef [ngClass]="'id-table-width'"> Eventos </md-header-cell>
+                    <md-cell *cdkCellDef="let row" [ngClass]="'id-table-width'"> {{row.numberOfEvents}} </md-cell>
+                </ng-container>
+        
+                <md-header-row *cdkHeaderRowDef="displayedColumnsColonies"></md-header-row>
+                <md-row *cdkRowDef="let row; columns: displayedColumnsColonies;"></md-row>
+            </md-table>
+        </div>
+    </md-grid-tile>
+</md-grid-list>
+<button md-raised-button (click)="refresh()">Actualizar</button>
