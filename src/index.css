@@ -80,12 +80,26 @@ a:hover {
   color: white;
 }
 
+.flex-inline{
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.flex-1{
+  flex: 1;
+}
+
 md-sidenav {
-  width: 200px;
+  width: 300px;
+  height: 300px;
 }
 .hand-cursor{
   cursor: pointer;
 }
 .fill-remaining-space{
   flex: 1 1 auto;
+}
+
+.margin-left{
+  margin-left: 10px;
 }

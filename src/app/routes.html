@@ -9,16 +9,38 @@
             <span class="fill-remaining-space"></span>
             <md-icon class="hand-cursor" (click)="sidenav.close()">clear</md-icon>
         </md-toolbar>
-        Período de tiempo
-        <md-list>
-            <md-list-item>
-                <input type="date"/>
-            </md-list-item>
-            <md-list-item>
-                <input type="time"/>
-            </md-list-item>
-        </md-list>
-        <button md-raised-button (click)="sidenav.close()">Consultar</button>
+        <h3>Busqueda</h3>
+        <md-card>
+            <md-card-title>
+                Fecha inicial
+            </md-card-title>
+            <md-card-content>
+                <div class="flex-inline">
+                    <md-input-container>
+                        <input mdInput type="date" [(ngModel)]="initDate">
+                    </md-input-container>
+                    <md-input-container class="margin-left">
+                        <input mdInput type="time" [(ngModel)]="initTime">
+                    </md-input-container>
+                </div>
+            </md-card-content>
+        </md-card>
+        <md-card>
+            <md-card-title>
+                Fecha final
+            </md-card-title>
+            <md-card-content>
+                <div class="flex-inline">
+                    <md-input-container>
+                        <input mdInput type="date" [(ngModel)]="endDate">
+                    </md-input-container>
+                    <md-input-container class="margin-left">
+                        <input mdInput type="time" [(ngModel)]="endTime">
+                    </md-input-container>
+                </div>
+            </md-card-content>
+        </md-card>
+        <button md-raised-button color="warn" (click)="sidenav.close(); sendRequest();" style="width: 100%;">Consultar</button>
     </md-sidenav>
     <router-outlet></router-outlet>
 </md-sidenav-container>

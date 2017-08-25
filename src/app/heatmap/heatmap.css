@@ -11,7 +11,7 @@ h3{
 }
 
 .map-margin{
-    margin: 20px;
+    margin: 0px;
 }
   
 .table-header {
@@ -35,9 +35,9 @@ h3[_ngcontent-c5]{
 }
 
 .id-table-width{
-    flex: 0 0 50px;
+    flex: 1;
 }
 
 .colonia-table-width{
-    flex: 0 0 75px;
+    flex: 2;
 }

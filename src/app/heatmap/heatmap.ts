@@ -26,24 +26,27 @@ export class HeatMapComponent implements OnInit {
   displayedColumnsCounts = ['name', 'numberOfEvents', ];
   displayedColumnsColonies = ['name', 'colony', 'numberOfEvents'];
 
-  constructor(private _heatMapService: HeatMapService) {}
+  constructor(private _heatMapService: HeatMapService,
+              private _data: DataService) {}
 
   ngOnInit() {
     this.points = [];
     this.heatmapLayer.initialized$.subscribe(heatmap => {
       this.heatmap = heatmap;
       this.map = this.heatmap.getMap();
-      this.getPoints();
     });
+    this._data.getMessage().subscribe(x => {
+      let init = (x.initDate + 'T' + x.initTime + ':00');
+      let end = (x.endDate + 'T' + x.endTime + ':00');
+      this.getPoints(init, end);
+    });
+    this.isLoading = false;
   }
 
-  refresh = function(){
-    this.getPoints();
-  };
-
-  private getPoints = function() {
+  private getPoints = function(initDate: string, endDate: string) {
+    this.isLoading = true;
     this.points = [];
-    this._heatMapService.getPoints()
+    this._heatMapService.getPoints(initDate, endDate)
     .subscribe(
       (response) => {
         this.points = response.eventData.map(function(coord: any){
