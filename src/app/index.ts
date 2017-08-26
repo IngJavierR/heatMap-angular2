@@ -6,6 +6,7 @@ import {NguiMapModule} from '@ngui/map';
 import {HttpModule} from '@angular/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {CdkTableModule} from '@angular/cdk';
+import {ChartsModule} from 'ng2-charts';
 import {MdSelectModule,
         MdButtonModule,
         MdToolbarModule,
@@ -41,6 +42,7 @@ import {HeatMapComponent} from './heatmap/heatmap';
     MdCardModule,
     MdInputModule,
     FormsModule,
+    ChartsModule,
     NguiMapModule.forRoot({apiUrl: 'https://maps.google.com/maps/api/js?v=3.exp&libraries=visualization'})
   ],
   exports: [

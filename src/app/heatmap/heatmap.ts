@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Rx';
 import { DataSource } from '@angular/cdk';
 import { HeatMapService } from '../services/heatmap.service';
 import { DataService } from '../services/data.service';
+import { ChartsModule } from 'ng2-charts';
 
 @Component({
     selector: 'heat-map',
@@ -13,12 +14,18 @@ import { DataService } from '../services/data.service';
 
 export class HeatMapComponent implements OnInit {
   @ViewChild(HeatmapLayer) heatmapLayer: HeatmapLayer;
+  @ViewChild('baseChart') baseChart: ChartsModule;
   heatmap: google.maps.visualization.HeatmapLayer;
   map: google.maps.Map;
   points: any[] = [];
   centerpoint = '29.073269, -110.959484';
   pointsResponse: Observable<any[]>;
   isLoading: boolean = true;
+
+  doughnutChartLabels: string[] = [];
+  doughnutChartData: number[] = [];
+  doughnutChartColors: string[] = [];
+  doughnutChartType: string = 'pie';
 
   dataSourceCounts;
   dataSourceColonies;
@@ -54,6 +61,23 @@ export class HeatMapComponent implements OnInit {
         });
         this.dataSourceCounts = new CountsDataSource(response.eventCounts);
         this.dataSourceColonies = new CountsDataSource(response.eventCountsColonies);
+
+        let events: string[] = [];
+        let numEvents: number[] = [];
+        response.eventCounts.forEach(x => {
+          events.push(x.idEvent);
+          numEvents.push(x.numberOfEvents);
+        });
+        this.doughnutChartLabels = events;
+        this.doughnutChartData = numEvents;
+        this.doughnutChartColors  = [
+          { // grey
+            backgroundColor: ['#FFE3D9', '#FFD0BF', '#FFBEA6', '#FFAB8C', '#FF9973', '#FF8659', '#FF7440', '#FF6126'],
+            borderColor: '#FFFFFF'
+          }
+        ];
+        this.doughnutChartType = 'pie';
+
         this.isLoading = false;
       },
       (err) => {

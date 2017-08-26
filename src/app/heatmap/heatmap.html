@@ -25,14 +25,28 @@
         <md-card-title>
             Grafica IPH
         </md-card-title>
-        
+        <div style="display: block">
+            <canvas baseChart 
+                [data]="doughnutChartData" 
+                [labels]="doughnutChartLabels" 
+                [chartType]="doughnutChartType"
+                [colors]="doughnutChartColors" >
+            </canvas>
+        </div>
     </md-card>
 
     <md-card class="flex-1">
         <md-card-title>
             Grafica Comandancia
         </md-card-title>
-        
+        <div style="display: block">
+            <canvas baseChart 
+                [data]="doughnutChartData" 
+                [labels]="doughnutChartLabels" 
+                [chartType]="doughnutChartType"
+                [colors]="doughnutChartColors" >
+            </canvas>
+        </div>
     </md-card>
 </div>
 
@@ -42,24 +56,30 @@
             Descripción
         </md-card-title>
         <div class="table-container mat-elevation-z8">
-            <md-table #table [dataSource]="dataSourceColonies">
-
-                <!-- Tipo Column -->
-                <ng-container cdkColumnDef="name">
-                    <md-header-cell *cdkHeaderCellDef> Tipo </md-header-cell>
-                    <md-cell *cdkCellDef="let row"> {{row.idEvent}} </md-cell>
-                </ng-container>
-
-                <!-- Numero Column -->
-                <ng-container cdkColumnDef="numberOfEvents">
-                    <md-header-cell *cdkHeaderCellDef [ngClass]="'id-table-width'"> Eventos </md-header-cell>
-                    <md-cell *cdkCellDef="let row" [ngClass]="'id-table-width'"> {{row.numberOfEvents}} </md-cell>
-                </ng-container>
-
-                <md-header-row *cdkHeaderRowDef="displayedColumnsCounts"></md-header-row>
-                <md-row *cdkRowDef="let row; columns: displayedColumnsCounts;"></md-row>
-            </md-table>
-        </div>
+                <md-table #table [dataSource]="dataSourceColonies">
+    
+                    <!-- Tipo Column -->
+                    <ng-container cdkColumnDef="name">
+                        <md-header-cell *cdkHeaderCellDef> Tipo </md-header-cell>
+                        <md-cell *cdkCellDef="let row"> {{row.idEvent}} </md-cell>
+                    </ng-container>
+    
+                    <!-- Colony Column -->
+                    <ng-container cdkColumnDef="colony">
+                        <md-header-cell *cdkHeaderCellDef [ngClass]="'colonia-table-width'"> Colonia </md-header-cell>
+                        <md-cell *cdkCellDef="let row" [ngClass]="'colonia-table-width'"> {{row.colony}} </md-cell>
+                    </ng-container>
+    
+                    <!-- Numero Column -->
+                    <ng-container cdkColumnDef="numberOfEvents">
+                        <md-header-cell *cdkHeaderCellDef [ngClass]="'id-table-width'"> Eventos </md-header-cell>
+                        <md-cell *cdkCellDef="let row" [ngClass]="'id-table-width'"> {{row.numberOfEvents}} </md-cell>
+                    </ng-container>
+    
+                    <md-header-row *cdkHeaderRowDef="displayedColumnsColonies"></md-header-row>
+                    <md-row *cdkRowDef="let row; columns: displayedColumnsColonies;"></md-row>
+                </md-table>
+            </div>
     </md-card>
 
     <md-card class="flex-1">
