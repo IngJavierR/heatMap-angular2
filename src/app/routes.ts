@@ -10,11 +10,12 @@ import { APP_PROVIDERS } from './app.providers';
   providers: APP_PROVIDERS
 })
 export class RootComponent {
-  initDate: string = '2017-08-11';
-  initTime: string = '17:40';
+  initDate: string = '2017-08-17';
+  initTime: string = '12:51';
   endDate: string = '2017-07-28';
   endTime: string = '15:39';
   //this.getPoints('2017-08-11T17:40:00', '2017-07-28T15:39:00');
+  //initialDate=2017-08-17T12:51:00&endDate=2017-07-28T15:39:00
   constructor(private _data: DataService) {}
 
   sendRequest() {

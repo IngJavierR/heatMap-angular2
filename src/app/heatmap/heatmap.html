@@ -6,7 +6,7 @@
             IPH
         </md-card-title>
         <ngui-map zoom="11" [center]="centerpoint" class="map-margin">
-            <heatmap-layer [data]="points"></heatmap-layer>
+            <heatmap-layer heatmapIph [data]="pointsIph"></heatmap-layer>
         </ngui-map>
     </md-card>
 
@@ -15,7 +15,7 @@
             Comandancia
         </md-card-title>
         <ngui-map zoom="11" [center]="centerpoint" class="map-margin">
-            <heatmap-layer [data]="points"></heatmap-layer>
+            <heatmap-layer heatmapCom [data]="pointsCom"></heatmap-layer>
         </ngui-map>
     </md-card>
 </div>
@@ -26,9 +26,9 @@
             Grafica IPH
         </md-card-title>
         <div style="display: block">
-            <canvas baseChart 
-                [data]="doughnutChartData" 
-                [labels]="doughnutChartLabels" 
+            <canvas baseChart
+                [data]="doughnutChartDataIph" 
+                [labels]="doughnutChartLabelsIph" 
                 [chartType]="doughnutChartType"
                 [colors]="doughnutChartColors" >
             </canvas>
@@ -41,8 +41,8 @@
         </md-card-title>
         <div style="display: block">
             <canvas baseChart 
-                [data]="doughnutChartData" 
-                [labels]="doughnutChartLabels" 
+                [data]="doughnutChartDataCom" 
+                [labels]="doughnutChartLabelsCom" 
                 [chartType]="doughnutChartType"
                 [colors]="doughnutChartColors" >
             </canvas>
@@ -56,7 +56,7 @@
             Descripción
         </md-card-title>
         <div class="table-container mat-elevation-z8">
-                <md-table #table [dataSource]="dataSourceColonies">
+                <md-table #table [dataSource]="dataSourceColoniesIph">
     
                     <!-- Tipo Column -->
                     <ng-container cdkColumnDef="name">
@@ -87,7 +87,7 @@
             Descripción
         </md-card-title>
         <div class="table-container mat-elevation-z8">
-            <md-table #table [dataSource]="dataSourceColonies">
+            <md-table #table [dataSource]="dataSourceColoniesCom">
 
                 <!-- Tipo Column -->
                 <ng-container cdkColumnDef="name">
