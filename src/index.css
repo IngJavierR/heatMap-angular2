@@ -157,3 +157,8 @@ h3[_ngcontent-c5]{
   height: 400px;
   margin: auto;
 }
+
+.error-input{
+  color: red;
+  font-size: 11px;
+}

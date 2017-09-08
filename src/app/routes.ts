@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ViewChild, ElementRef, OnInit} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {MainComponent} from './main/main';
 import {DataService} from './services/data.service';
@@ -12,6 +12,7 @@ import {APP_PROVIDERS} from './app.providers';
   providers: APP_PROVIDERS
 })
 export class RootComponent implements OnInit {
+  @ViewChild('sidenav') sidenav: any;
   initDate: string = '2017-06-01';
   initTime: string = '12:51';
   endDate: string = '2017-08-28';
@@ -53,6 +54,15 @@ export class RootComponent implements OnInit {
   }
 
   sendRequest() {
+
+    if (!this.validateDates(this.initDate, this.initTime, this.endDate, this.endTime)) {
+      this._snackBar.open('La fecha inicial no puede ser superior a la fecha final', 'Ok', {
+        duration: 3000,
+      });
+      return;
+    }
+    this.sidenav.close();
+
     let coloniaIphSel = this.coloniaIphSelected;
     let coloniaComSel = this.coloniaComandanciaSelected;
 
@@ -83,6 +93,15 @@ export class RootComponent implements OnInit {
     };
     this._data.setMessage(msg);
   }
+
+  validateDates(iDate: string, iTime: string, eDate: string, eTime: string) {
+    var initDate = new Date(`${iDate}T${iTime}`);
+    var endDate = new Date(`${eDate}T${eTime}`);
+    console.log('1' + initDate);
+    console.log('2' + endDate);
+    return initDate < endDate;
+  }
+
 }
 
 export const routes: Routes = [

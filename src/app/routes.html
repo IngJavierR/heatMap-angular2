@@ -17,10 +17,20 @@
                     <h5>Fecha inicial</h5>
                     <div class="flex-inline">
                         <md-input-container>
-                            <input mdInput placeholder="Fecha" type="date" [(ngModel)]="initDate" [max]="maxDate">
+                            <input mdInput placeholder="Fecha" type="date" [(ngModel)]="initDate" #idInitDate="ngModel" [max]="maxDate" required>
+                            <div *ngIf="idInitDate.invalid && (idInitDate.dirty || idInitDate.touched)" class="error-input">
+                                <div *ngIf="idInitDate.errors.required">
+                                    Campo Obligatorio
+                                </div>
+                            </div>
                         </md-input-container>
                         <md-input-container class="margin-left">
-                            <input mdInput placeholder="Hora" type="time" [(ngModel)]="initTime">
+                            <input mdInput placeholder="Hora" type="time" [(ngModel)]="initTime" #idInitTime="ngModel" required>
+                            <div *ngIf="idInitTime.invalid && (idInitTime.dirty || idInitTime.touched)" class="error-input">
+                                <div *ngIf="idInitTime.errors.required">
+                                    Campo Obligatorio
+                                </div>
+                            </div>
                         </md-input-container>
                     </div>
                 </div>
@@ -28,10 +38,20 @@
                     <h5>Fecha final</h5>
                     <div class="flex-inline">
                         <md-input-container>
-                            <input mdInput placeholder="Fecha" type="date" [(ngModel)]="endDate" [max]="maxDate">
+                            <input mdInput placeholder="Fecha" type="date" [(ngModel)]="endDate" [max]="maxDate" #idEndDate="ngModel" required>
+                            <div *ngIf="idEndDate.invalid && (idEndDate.dirty || idEndDate.touched)" class="error-input">
+                                <div *ngIf="idEndDate.errors.required">
+                                    Campo Obligatorio
+                                </div>
+                            </div>
                         </md-input-container>
                         <md-input-container class="margin-left">
-                            <input mdInput placeholder="Hora" type="time" [(ngModel)]="endTime">
+                            <input mdInput placeholder="Hora" type="time" [(ngModel)]="endTime" #idEndTime="ngModel" required>
+                            <div *ngIf="idEndTime.invalid && (idEndTime.dirty || idEndTime.touched)" class="error-input">
+                                <div *ngIf="idEndTime.errors.required">
+                                    Campo Obligatorio
+                                </div>
+                            </div>
                         </md-input-container>
                     </div>
                 </div>
@@ -75,7 +95,8 @@
         </div>
         <br>
         <br>
-        <button md-raised-button color="warn" (click)="sidenav.close(); sendRequest();" style="width: 100%;">Consultar</button>
+        <button md-raised-button color="warn" (click)="sendRequest();" style="width: 100%;" 
+            [disabled]="idEndTime.invalid || idEndDate.invalid || idInitDate.invalid || idInitTime.invalid">Consultar</button>
     </md-sidenav>
     <router-outlet></router-outlet>
 </md-sidenav-container>
