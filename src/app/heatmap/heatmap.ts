@@ -1,15 +1,15 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
-import { HeatmapLayer } from '@ngui/map';
-import { Observable } from 'rxjs/Rx';
-import { DataSource } from '@angular/cdk';
-import { HeatMapService } from '../services/heatmap.service';
-import { DataService } from '../services/data.service';
-import { ChartsModule } from 'ng2-charts';
+import {Component, ViewChild, OnInit} from '@angular/core';
+import {HeatmapLayer} from '@ngui/map';
+import {Observable} from 'rxjs/Rx';
+import {DataSource} from '@angular/cdk';
+import {HeatMapService} from '../services/heatmap.service';
+import {DataService} from '../services/data.service';
+import {ChartsModule} from 'ng2-charts';
+import {MdSnackBar} from '@angular/material';
 
 @Component({
   selector: 'heat-map',
-  templateUrl: './app/heatmap/heatmap.html',
-  styleUrls: ['./app/heatmap/heatmap.css']
+  template: require('./heatmap.html')
 })
 
 export class HeatMapComponent implements OnInit {
@@ -22,47 +22,91 @@ export class HeatMapComponent implements OnInit {
   centerpoint = '29.073269, -110.959484';
   pointsResponse: Observable<any[]>;
   isLoading: boolean = true;
-
   doughnutChartLabelsIph: string[] = [];
   doughnutChartDataIph: number[] = [];
   doughnutChartLabelsCom: string[] = [];
   doughnutChartDataCom: number[] = [];
-  doughnutChartColors: string[] = [];
+  doughnutChartColors: any[] = [];
   doughnutChartType: string = 'pie';
-
   dataSourceCounts;
   dataSourceColoniesIph;
   dataSourceColoniesCom;
-
-  displayedColumnsCounts = ['name', 'numberOfEvents',];
+  displayedColumnsCounts = ['name', 'numberOfEvents'];
   displayedColumnsColonies = ['name', 'colony', 'numberOfEvents'];
+  queryIph: string;
+  queryComandancia: string;
+  private backgroundColors: string[] = [];
 
   constructor(private _heatMapService: HeatMapService,
-    private _data: DataService) { }
+              private _data: DataService,
+              private _snackBar: MdSnackBar) { }
 
   ngOnInit() {
     this.pointsIph = [];
     this.pointsCom = [];
-    this.heatmapLayer.initialized$.subscribe(heatmap => {
-      this.heatmap = heatmap;
-      this.map = this.heatmap.getMap();
+    this.heatmapLayer
+      .initialized$
+      .subscribe(heatmap => {
+        this.heatmap = heatmap;
+        this.map = this.heatmap.getMap();
     });
-    this._data.getMessage().subscribe(x => {
-      let init = (x.initDate + 'T' + x.initTime + ':00');
-      let end = (x.endDate + 'T' + x.endTime + ':00');
-      this.getPoints(init, end);
+    this._data
+      .getMessage()
+      .subscribe(x => {
+        let init = (x.initDate + 'T' + x.initTime + ':00');
+        let end = (x.endDate + 'T' + x.endTime + ':00');
+
+        let requestParams = Object
+                          .assign({'initDate': init},
+                            {'endDate': end},
+                            {'iph': x.iph},
+                            {'comandancia': x.comandancia});
+
+        this.printQuery(requestParams);
+        this.getPoints(requestParams);
     });
     this.isLoading = false;
   }
 
-  private getPoints = function (initDate: string, endDate: string) {
+  private printQuery(params: any) {
+
+    this.queryComandancia = `Fecha Inicial: [${params.initDate}]
+                             Fecha Final: [${params.endDate}]
+                             Colonia: [${params.comandancia.coloniaName.length > 0 ? params.comandancia.coloniaName[0].colonia : 'Todas'}]
+                             Tipo Evento: [${params.comandancia.tipoEvento || 'Todos'}]`;
+
+    this.queryIph = `Fecha Inicial: [${params.initDate}]
+                     Fecha Final: [${params.endDate}]
+                     Colonia: [${params.iph.coloniaName.length > 0 ? params.iph.coloniaName[0].colonia : 'Todas'}]
+                     Tipo Evento: [${params.iph.tipoEvento || 'Todos'}]`;
+  }
+
+  private getPoints = function (requestParams: any) {
     this.isLoading = true;
 
     this.pointsIph = [];
     this.pointsCom = [];
-    this._heatMapService.getPoints(initDate, endDate)
+    this._heatMapService.getPoints(requestParams)
       .subscribe(
       (response) => {
+
+        this.backgroundColors = [];
+        if (response.iph.eventCounts.length > response.comandancia.eventCounts.length) {
+          Observable
+            .from(response.iph.eventCounts)
+            .subscribe(_ => this.backgroundColors.push(this.getRandomColor()));
+        } else {
+          Observable
+            .from(response.comandancia.eventCounts)
+            .subscribe(_ => this.backgroundColors.push(this.getRandomColor()));
+        }
+        this.doughnutChartColors = [
+          {
+            backgroundColor: this.backgroundColors,
+            borderColor: ['#FFFFFF']
+          }
+        ];
+        this.doughnutChartType = 'pie';
 
         this.processIph(response);
         this.processComandancia(response);
@@ -70,6 +114,9 @@ export class HeatMapComponent implements OnInit {
         this.isLoading = false;
       },
       (err) => {
+        this._snackBar.open('Ocurrión un error al obtener la información', 'Ok', {
+          duration: 3000,
+        });
         this.isLoading = false;
         console.log(err);
       }
@@ -77,11 +124,26 @@ export class HeatMapComponent implements OnInit {
   };
 
   private processIph(response: any) {
-    this.pointsIph = response.iph.eventData.map(function (coord: any) {
-      return (new google.maps.LatLng(coord.latitude, coord.lontitude));
+    let iphMap = response.iph.eventData.reduce((x, y) => x.includes(y) ? x : [...x, y], []);
+
+    this.pointsIph = iphMap.filter(function(coord: any){
+      return coord.latitude !== '' && coord.lontitude !== '';
+    }).map(function (coord: any) {
+      return new google.maps.LatLng(coord.latitude, coord.lontitude);
     });
+
     this.dataSourceCounts = new CountsDataSource(response.iph.eventCounts);
-    this.dataSourceColoniesIph = new CountsDataSource(response.iph.eventCountsColonies);
+    this.dataSourceColoniesIph = new CountsDataSource(
+      response.iph.eventCountsColonies
+      .sort(function(a: any, b: any) {
+      if (a.numberOfEvents < b.numberOfEvents) {
+        return 1;
+      }
+      if (a.numberOfEvents > b.numberOfEvents) {
+        return -1;
+      }
+      return 0;
+    }));
 
     let events: string[] = [];
     let numEvents: number[] = [];
@@ -89,23 +151,32 @@ export class HeatMapComponent implements OnInit {
       events.push(x.idEvent);
       numEvents.push(x.numberOfEvents);
     });
+
     this.doughnutChartLabelsIph = events;
     this.doughnutChartDataIph = numEvents;
-    /*this.doughnutChartColors = [
-      {
-        backgroundColor: ['#FFE3D9', '#FFD0BF', '#FFBEA6', '#FFAB8C', '#FF9973', '#FF8659', '#FF7440', '#FF6126'],
-        borderColor: '#FFFFFF'
-      }
-    ];*/
-    this.doughnutChartType = 'pie';
   }
 
   private processComandancia(response: any) {
-    this.pointsCom = response.comandancia.eventData.map(function (coord: any) {
-      return (new google.maps.LatLng(coord.latitude, coord.lontitude));
+    let comandanciaMap = response.comandancia.eventData.reduce((x, y) => x.includes(y) ? x : [...x, y], []);
+
+    this.pointsCom = comandanciaMap.filter(function(coord: any){
+      return coord.latitude !== '' && coord.lontitude !== '';
+    }).map(function (coord: any) {
+      return new google.maps.LatLng(coord.latitude, coord.lontitude);
     });
+
     this.dataSourceCounts = new CountsDataSource(response.comandancia.eventCounts);
-    this.dataSourceColoniesCom = new CountsDataSource(response.comandancia.eventCountsColonies);
+    this.dataSourceColoniesCom = new CountsDataSource(
+      response.comandancia.eventCountsColonies
+      .sort(function(a: any, b: any) {
+      if (a.numberOfEvents < b.numberOfEvents) {
+        return 1;
+      }
+      if (a.numberOfEvents > b.numberOfEvents) {
+        return -1;
+      }
+      return 0;
+    }));
 
     let events: string[] = [];
     let numEvents: number[] = [];
@@ -113,15 +184,18 @@ export class HeatMapComponent implements OnInit {
       events.push(x.idEvent);
       numEvents.push(x.numberOfEvents);
     });
+
     this.doughnutChartLabelsCom = events;
     this.doughnutChartDataCom = numEvents;
-    /*this.doughnutChartColors = [
-      {
-        backgroundColor: ['#FFE3D9', '#FFD0BF', '#FFBEA6', '#FFAB8C', '#FF9973', '#FF8659', '#FF7440', '#FF6126'],
-        borderColor: '#FFFFFF'
-      }
-    ];*/
-    this.doughnutChartType = 'pie';
+  }
+
+  private getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
   }
 }
 

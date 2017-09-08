@@ -90,7 +90,7 @@ a:hover {
 }
 
 md-sidenav {
-  width: 300px;
+  width: 550px;
   height: 300px;
 }
 .hand-cursor{
@@ -102,4 +102,58 @@ md-sidenav {
 
 .margin-left{
   margin-left: 10px;
+}
+
+/*
+Hetmap
+*/
+h3{
+  color: #f44336;
+}
+
+.table-container {
+  display: flex;
+  flex-direction: column;
+  max-height: 500px;
+  min-width: 300px;
+  margin: 10px;
+}
+
+.map-margin{
+  margin: 0px;
+}
+
+.table-header {
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  padding-left: 24px;
+  font-size: 20px;
+}
+
+.mat-table {
+  overflow: auto;
+}
+
+.mat-grid-tile-header{
+  background: #f44336 !important;
+}
+
+h3[_ngcontent-c5]{
+  color: white;
+}
+
+.id-table-width{
+  flex: 1;
+}
+
+.colonia-table-width{
+  flex: 2;
+}
+
+.graph-container{
+  display: block; 
+  width: 400px; 
+  height: 400px;
+  margin: auto;
 }

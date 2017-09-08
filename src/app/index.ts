@@ -17,11 +17,32 @@ import {MdSelectModule,
         MdGridListModule,
         MdProgressBarModule,
         MdCardModule,
-        MdInputModule} from '@angular/material';
-
+        MdInputModule,
+        MdTooltipModule,
+        MdNativeDateModule,
+        MdDatepickerModule,
+        MdSnackBarModule} from '@angular/material';
 
 import {MainComponent} from './main/main';
 import {HeatMapComponent} from './heatmap/heatmap';
+
+const MATERIAL_MODULES = [
+  MdSelectModule,
+  MdButtonModule,
+  MdToolbarModule,
+  MdSidenavModule,
+  MdListModule,
+  MdIconModule,
+  MdTableModule,
+  MdGridListModule,
+  MdProgressBarModule,
+  MdCardModule,
+  MdInputModule,
+  MdTooltipModule,
+  MdNativeDateModule,
+  MdDatepickerModule,
+  MdSnackBarModule
+  ];
 
 @NgModule({
   imports: [
@@ -29,35 +50,15 @@ import {HeatMapComponent} from './heatmap/heatmap';
     HttpModule,
     routing,
     BrowserAnimationsModule,
-    MdSelectModule,
-    MdButtonModule,
-    MdToolbarModule,
-    MdSidenavModule,
-    MdListModule,
-    MdIconModule,
-    MdTableModule,
     CdkTableModule,
-    MdGridListModule,
-    MdProgressBarModule,
-    MdCardModule,
-    MdInputModule,
     FormsModule,
     ChartsModule,
-    NguiMapModule.forRoot({apiUrl: 'https://maps.google.com/maps/api/js?v=3.exp&libraries=visualization'})
+    MATERIAL_MODULES,
+    NguiMapModule.forRoot({apiUrl: 'https://maps.google.com/maps/api/js?v=3.exp&libraries=visualization&key=AIzaSyCzxa1KQr83JhsC7MU5ATTlwM6C5hkzIDA'})
   ],
   exports: [
-    MdToolbarModule,
-    MdSidenavModule,
-    MdSelectModule,
-    MdButtonModule,
-    MdListModule,
-    MdIconModule,
-    MdTableModule,
     CdkTableModule,
-    MdGridListModule,
-    MdProgressBarModule,
-    MdCardModule,
-    MdInputModule
+    MATERIAL_MODULES,
   ],
   declarations: [
     RootComponent,

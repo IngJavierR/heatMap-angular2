@@ -41,3 +41,10 @@ h3[_ngcontent-c5]{
 .colonia-table-width{
     flex: 2;
 }
+
+.graph-container{
+    display: block; 
+    width: 400px; 
+    height: 400px;
+    margin: auto;
+}

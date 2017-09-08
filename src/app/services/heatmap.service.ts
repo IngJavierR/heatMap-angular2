@@ -7,11 +7,24 @@ import 'rxjs/add/operator/catch';
 @Injectable()
 export class HeatMapService {
 
-    private _url: string = 'http://localhost:8080/comandancia-analytics-web/analytics/indicadores/getCoord?';
+    private _url: string = 'https://192.168.0.127:8443/comandancia-analytics-web/analytics/indicadores/';
     constructor(private _http: Http) {}
 
-    getPoints(initDate: string, endDate: string) {
-        let url = this._url + ('initialDate=' + initDate + '&endDate=' + endDate);
+    getCatalogos() {
+        let method: string = 'getCatalogo';
+
+        let url = this._url + (`${method}`);
+        return this._http.get(url)
+            .map((resp: Response) => resp.json())
+            .catch(this.handleError);
+    }
+
+    getPoints(requestParams: any) {
+        let method: string = 'getCoord';
+
+        let url = this._url + `${method}?initialDate=${requestParams.initDate}&endDate=${requestParams.endDate}
+                                &tipoEventoCom=${requestParams.comandancia.tipoEvento}&coloniaCom=${requestParams.comandancia.colonia}&
+                                tipoEventoIph=${requestParams.iph.tipoEvento}&coloniaIph=${requestParams.iph.colonia}`;
         return this._http.get(url)
             .map((resp: Response) => resp.json())
             .catch(this.handleError);

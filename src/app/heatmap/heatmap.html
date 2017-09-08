@@ -1,10 +1,13 @@
 <md-progress-bar color="warn" mode="indeterminate" *ngIf="isLoading"></md-progress-bar>
-
 <div class="flex-inline">
     <md-card class="flex-1">
         <md-card-title>
             IPH
         </md-card-title>
+        <div>
+            <h5>Parametros de búsqueda</h5>
+            <h6>{{queryIph}}</h6>
+        </div>
         <ngui-map zoom="11" [center]="centerpoint" class="map-margin">
             <heatmap-layer heatmapIph [data]="pointsIph"></heatmap-layer>
         </ngui-map>
@@ -14,6 +17,10 @@
         <md-card-title>
             Comandancia
         </md-card-title>
+        <div>
+            <h5>Parametros de búsqueda</h5>
+            <h6>{{queryComandancia}}</h6>
+        </div>
         <ngui-map zoom="11" [center]="centerpoint" class="map-margin">
             <heatmap-layer heatmapCom [data]="pointsCom"></heatmap-layer>
         </ngui-map>
@@ -25,7 +32,7 @@
         <md-card-title>
             Grafica IPH
         </md-card-title>
-        <div style="display: block">
+        <div class="graph-container" flex>
             <canvas baseChart
                 [data]="doughnutChartDataIph" 
                 [labels]="doughnutChartLabelsIph" 
@@ -39,7 +46,7 @@
         <md-card-title>
             Grafica Comandancia
         </md-card-title>
-        <div style="display: block">
+        <div class="graph-container">
             <canvas baseChart 
                 [data]="doughnutChartDataCom" 
                 [labels]="doughnutChartLabelsCom" 
