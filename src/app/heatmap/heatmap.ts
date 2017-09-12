@@ -35,11 +35,9 @@ export class HeatMapComponent implements OnInit {
   displayedColumnsCounts = ['name', 'numberOfEvents'];
   displayedColumnsColonies = ['name', 'colony', 'numberOfEvents'];
   queryIphFechas: string;
-  queryIphColonia: string;
-  queryIphTipoEvento: string;
+  queryIphEvento: string;
   queryComandanciaFechas: string;
-  queryComandanciaColonia: string;
-  queryComandanciaTipoEvento: string;
+  queryComandanciaEvento: string;
   private backgroundColors: string[] = [];
 
   constructor(private _heatMapService: HeatMapService,
@@ -101,13 +99,13 @@ export class HeatMapComponent implements OnInit {
 
     this.queryComandanciaFechas = `Fecha Inicial: ${new Date(params.initDate).toLocaleDateString('es-MX', options)} |
                                    Fecha Final: ${new Date(params.endDate).toLocaleDateString('es-MX', options)}`;
-    this.queryComandanciaColonia = `Colonia: ${params.comandancia.coloniaName.length > 0 ? params.comandancia.coloniaName[0].colonia : 'Todas'}`;
-    this.queryComandanciaTipoEvento = `Tipo Evento: ${params.comandancia.tipoEvento || 'Todos'}`;
+    this.queryComandanciaEvento = `Colonia: ${params.comandancia.coloniaName.length > 0 ? params.comandancia.coloniaName[0].colonia : 'Todas'} |
+                                   Tipo Evento: ${params.comandancia.tipoEvento || 'Todos'}`;
 
     this.queryIphFechas = `Fecha Inicial: ${new Date(params.initDate).toLocaleDateString('es-MX', options)} |
                            Fecha Final: ${new Date(params.endDate).toLocaleDateString('es-MX', options)}`;
-    this.queryIphColonia = `Colonia: ${params.iph.coloniaName.length > 0 ? params.iph.coloniaName[0].colonia : 'Todas'}`;
-    this.queryIphTipoEvento = `Tipo Evento: ${params.iph.tipoEvento || 'Todos'}`;
+    this.queryIphEvento = `Colonia: ${params.iph.coloniaName.length > 0 ? params.iph.coloniaName[0].colonia : 'Todas'} |
+                           Tipo Evento: ${params.iph.tipoEvento || 'Todos'}`;
   }
 
   private getPoints = function (requestParams: any) {
