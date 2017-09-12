@@ -5,9 +5,12 @@
             IPH
         </md-card-title>
         <div>
-            <h5>Parametros de búsqueda</h5>
-            <h6>{{queryIph}}</h6>
+            <h5>Parámetros de búsqueda</h5>
+            <h6 class="query-params">{{queryIphFechas}}</h6>
+            <h6 class="query-params">{{queryIphColonia}}</h6>
+            <h6 class="query-params">{{queryIphTipoEvento}}</h6>
         </div>
+        <br>
         <ngui-map zoom="11" [center]="centerpoint" class="map-margin">
             <heatmap-layer heatmapIph [data]="pointsIph"></heatmap-layer>
         </ngui-map>
@@ -18,9 +21,12 @@
             Comandancia
         </md-card-title>
         <div>
-            <h5>Parametros de búsqueda</h5>
-            <h6>{{queryComandancia}}</h6>
+            <h5>Parámetros de búsqueda</h5>
+            <h6 class="query-params">{{queryComandanciaFechas}}</h6>
+            <h6 class="query-params">{{queryComandanciaColonia}}</h6>
+            <h6 class="query-params">{{queryComandanciaTipoEvento}}</h6>
         </div>
+        <br>
         <ngui-map zoom="11" [center]="centerpoint" class="map-margin">
             <heatmap-layer heatmapCom [data]="pointsCom"></heatmap-layer>
         </ngui-map>
@@ -30,7 +36,7 @@
 <div class="flex-inline">
     <md-card class="flex-1">
         <md-card-title>
-            Grafica IPH
+            Gráfica IPH por artículo
         </md-card-title>
         <div class="graph-container" flex>
             <canvas baseChart
@@ -44,7 +50,7 @@
 
     <md-card class="flex-1">
         <md-card-title>
-            Grafica Comandancia
+            Gráfica Comandancia por artículo
         </md-card-title>
         <div class="graph-container">
             <canvas baseChart 

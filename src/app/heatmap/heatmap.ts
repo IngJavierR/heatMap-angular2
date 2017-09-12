@@ -6,6 +6,7 @@ import {HeatMapService} from '../services/heatmap.service';
 import {DataService} from '../services/data.service';
 import {ChartsModule} from 'ng2-charts';
 import {MdSnackBar} from '@angular/material';
+import '../extensions/date.extensions';
 
 @Component({
   selector: 'heat-map',
@@ -33,8 +34,12 @@ export class HeatMapComponent implements OnInit {
   dataSourceColoniesCom;
   displayedColumnsCounts = ['name', 'numberOfEvents'];
   displayedColumnsColonies = ['name', 'colony', 'numberOfEvents'];
-  queryIph: string;
-  queryComandancia: string;
+  queryIphFechas: string;
+  queryIphColonia: string;
+  queryIphTipoEvento: string;
+  queryComandanciaFechas: string;
+  queryComandanciaColonia: string;
+  queryComandanciaTipoEvento: string;
   private backgroundColors: string[] = [];
 
   constructor(private _heatMapService: HeatMapService,
@@ -53,32 +58,56 @@ export class HeatMapComponent implements OnInit {
     this._data
       .getMessage()
       .subscribe(x => {
-        let init = (x.initDate + 'T' + x.initTime + ':00');
-        let end = (x.endDate + 'T' + x.endTime + ':00');
+        let init = new Date(x.initDate + 'T' + x.initTime + ':00');
+        let end = new Date(x.endDate + 'T' + x.endTime + ':00');
 
         let requestParams = Object
-                          .assign({'initDate': init},
-                            {'endDate': end},
+                          .assign({'initDate': init.toISOString()},
+                            {'endDate': end.toISOString()},
                             {'iph': x.iph},
                             {'comandancia': x.comandancia});
 
         this.printQuery(requestParams);
         this.getPoints(requestParams);
     });
+    this.loadWithDefaultDates();
     this.isLoading = false;
   }
 
+  private loadWithDefaultDates() {
+    let currrentDay = new Date();
+    let oneDayAgo = new Date().addDays(-1);
+
+    let requestParams = {
+      'initDate': oneDayAgo.toISOString(),
+      'endDate': currrentDay.toISOString(),
+      'iph': {
+        'colonia': '',
+        'coloniaName': [],
+        'tipoEvento': '',
+      },
+      'comandancia': {
+        'colonia': '',
+        'coloniaName': [],
+        'tipoEvento': '',
+      }
+    };
+    this.printQuery(requestParams);
+    this.getPoints(requestParams);
+  }
+
   private printQuery(params: any) {
+    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
 
-    this.queryComandancia = `Fecha Inicial: [${params.initDate}]
-                             Fecha Final: [${params.endDate}]
-                             Colonia: [${params.comandancia.coloniaName.length > 0 ? params.comandancia.coloniaName[0].colonia : 'Todas'}]
-                             Tipo Evento: [${params.comandancia.tipoEvento || 'Todos'}]`;
+    this.queryComandanciaFechas = `Fecha Inicial: ${new Date(params.initDate).toLocaleDateString('es-MX', options)} |
+                                   Fecha Final: ${new Date(params.endDate).toLocaleDateString('es-MX', options)}`;
+    this.queryComandanciaColonia = `Colonia: ${params.comandancia.coloniaName.length > 0 ? params.comandancia.coloniaName[0].colonia : 'Todas'}`;
+    this.queryComandanciaTipoEvento = `Tipo Evento: ${params.comandancia.tipoEvento || 'Todos'}`;
 
-    this.queryIph = `Fecha Inicial: [${params.initDate}]
-                     Fecha Final: [${params.endDate}]
-                     Colonia: [${params.iph.coloniaName.length > 0 ? params.iph.coloniaName[0].colonia : 'Todas'}]
-                     Tipo Evento: [${params.iph.tipoEvento || 'Todos'}]`;
+    this.queryIphFechas = `Fecha Inicial: ${new Date(params.initDate).toLocaleDateString('es-MX', options)} |
+                           Fecha Final: ${new Date(params.endDate).toLocaleDateString('es-MX', options)}`;
+    this.queryIphColonia = `Colonia: ${params.iph.coloniaName.length > 0 ? params.iph.coloniaName[0].colonia : 'Todas'}`;
+    this.queryIphTipoEvento = `Tipo Evento: ${params.iph.tipoEvento || 'Todos'}`;
   }
 
   private getPoints = function (requestParams: any) {

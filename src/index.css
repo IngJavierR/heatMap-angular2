@@ -162,3 +162,9 @@ h3[_ngcontent-c5]{
   color: red;
   font-size: 11px;
 }
+
+.query-params{
+  font-size: 11px;
+  margin-top: 1px;
+  margin-bottom: 1px;
+}

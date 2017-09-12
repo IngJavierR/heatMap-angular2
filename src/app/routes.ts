@@ -97,8 +97,6 @@ export class RootComponent implements OnInit {
   validateDates(iDate: string, iTime: string, eDate: string, eTime: string) {
     var initDate = new Date(`${iDate}T${iTime}`);
     var endDate = new Date(`${eDate}T${eTime}`);
-    console.log('1' + initDate);
-    console.log('2' + endDate);
     return initDate < endDate;
   }
 
